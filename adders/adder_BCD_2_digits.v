@@ -16,10 +16,10 @@ module adder_BCD_2_digits(
 	wire [4:0] sum = X + Y + cin;
 	wire [3:0] A, M;	
 	
-	comparatorB c(sum, z);
-	circuitB cB(sum,A);
+	comparator_over_10_5_bits c(sum, z);
+	subtract_10_5_bits cB(sum,A);
 	mux_2_1_4_bits m(sum[3:0], A, z, M);
-	binary_to_hex_1_bit b(z, S1);
+	binary_to_hex_decoder_1_bit b(z, S1);
 	decoder_hex_10(M, S0);
 	
 endmodule

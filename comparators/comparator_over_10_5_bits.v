@@ -1,4 +1,4 @@
-module comparatorB(
+module comparator_over_10_5_bits(
 	input [4:0]x,
 	output reg z);
 	

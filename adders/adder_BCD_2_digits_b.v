@@ -31,5 +31,5 @@ module adder_BCD_2_digits_b(
 			end
 	 end
 	 decoder_hex_10 d2((sum-Z0), S0);
-	 binary_to_hex_1_bit b(c1, S1);
+	 binary_to_hex_decoder_1_bit b(c1, S1);
 endmodule

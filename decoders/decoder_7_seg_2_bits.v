@@ -1,4 +1,4 @@
-module decoder_7_seg (
+module decoder_7_seg_2_bits (
 	input [1:0]C,
 	output reg [0:6]h);
 	

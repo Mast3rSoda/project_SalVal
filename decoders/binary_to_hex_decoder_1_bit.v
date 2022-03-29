@@ -1,4 +1,4 @@
-module binary_to_hex_1_bit(
+module binary_to_hex_decoder_1_bit(
 	input x,
 	output reg [0:6]h);
 	

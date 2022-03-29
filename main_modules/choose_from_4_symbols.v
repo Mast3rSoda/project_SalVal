@@ -8,6 +8,6 @@ module choose_from_4_symbols(
 	assign LEDR = SW;
 	
 	mux_4_1_2_bits(SW[1:0], SW[3:2], SW[5:4], SW[7:6], SW[9:8], O);
-	decoder_7_seg(O, HEX0);
+	decoder_7_seg_2_bits(O, HEX0);
 	
 endmodule
