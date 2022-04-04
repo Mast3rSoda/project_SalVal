@@ -1,27 +1,26 @@
 module adder_A_B_8_bits(
 	input [7:0] in,
-	input areset, clk,
-	output [6:0] oA1, oA2, oB1, oB2, oS1, oS2,
-	output reg cout);
+	input clk,reset,
+	output [7:0]S,
+	output reg cout,
+	output [7:0] A,B);
 	
-	wire [7:0]data /* synthesis keep*/;
+	wire [7:0] saved_number /* synthesis keep*/;
 	
-	register_8_bit_with_areset r0(clk, areset, in, data);
+	reg_N_bits_areset #(8) register(clk,reset,in,saved_number);
 	
-	decoder_hex_16 dB1((data/16), oA1);
-	decoder_hex_16 dB2((data%16), oA2);
-	decoder_hex_16 dA1((in/16), oB1);
-	decoder_hex_16 dA2((in%16), oB2);
+	assign A = saved_number;
+	assign B = in;
 	
-	always @(in or data) begin
+	wire [8:0] sum = in + saved_number /* synthesis keep*/;
+	
+	assign S = sum[7:0];
+	
+	always @(sum) begin
 		cout = 0;
-		if((in + data) > 255)
+		if(sum>255)
 			cout = 1;
 	end
-		
-	wire [7:0] sum = in + data /* synthesis keep*/;
 	
-	decoder_hex_16 dS1((sum/16), oS1);
-	decoder_hex_16 dS2((sum%16), oS2);
 	
 endmodule
