@@ -1,6 +1,6 @@
 module decoder_hex_16 (
 	input [3:0] x,
-	reg [6:0] h);
+	output reg [6:0] h);
 	
 	always @(x)
 			case (x)

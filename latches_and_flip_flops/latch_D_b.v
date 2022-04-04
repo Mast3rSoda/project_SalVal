@@ -1,4 +1,4 @@
-module latch_D (
+module latch_D_b (
     input Clk,D, 
     output reg Q);
     
