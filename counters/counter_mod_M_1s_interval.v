@@ -10,7 +10,7 @@ module counter_mod_M_1s_interval #(parameter M=10)
 			v = v >> 1;
 	endfunction
 	
-	wire [intervalSize-1:0] counter1_out;
+	wire [intervalSize-1:0] counter1_out /* synthesis keep */;
 	wire enable_counter2;
 	
 	counter_mod_M #(50000000) counter1(CLOCK_50,aclr,enable,counter1_out);
