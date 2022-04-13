@@ -6,7 +6,7 @@ module move_word_4_chars(
 	wire [1:0] counter;
 	wire [1:0] c0,c1,c2,c3;
 	
-	counter_mod_M_1s_interval #(4) c4(CLOCK_50,aclr,enable,counter);
+	counter_mod_M_1s_interval #(5) c4(CLOCK_50,aclr,enable,counter);
 	
 	reg [7:0] list;
 	reg [1:0] tmp;
@@ -18,8 +18,8 @@ module move_word_4_chars(
 				tmp = counter;
 			end
 			1'b00: begin
-				list=8'b00011011;
-				tmp = 3 - counter;
+				list=8'b11100100;
+				tmp = 4 - counter;
 			end
 		endcase
 	end
