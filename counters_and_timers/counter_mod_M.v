@@ -1,7 +1,6 @@
 module counter_mod_M #(parameter M=10)
 	(input clk,aclr,enable,
-	output reg [N-1:0] Q,
-	output rollover);
+	output reg [N-1:0] Q);
 	
 	localparam N=clogb2(M-1);
 	
