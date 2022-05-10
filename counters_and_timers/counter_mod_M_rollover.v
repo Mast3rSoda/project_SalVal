@@ -13,7 +13,7 @@ module counter_mod_M_rollover #(parameter M=20)
 	always @(posedge clk, negedge aclr)
 		if (!aclr) 
 			Q <= {N{1'b0}};
-		else if (Q >= M-1) 
+		else if (Q == M-1) 
 			Q <= {N{1'b0}};
 		else if (enable) 
 			Q <= Q + 1'b1;

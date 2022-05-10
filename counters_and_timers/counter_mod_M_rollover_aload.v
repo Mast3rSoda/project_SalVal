@@ -14,7 +14,7 @@ module counter_mod_M_rollover_aload #(parameter M=10)
 	always @(posedge clk, negedge aclr, posedge aload)
 		if (!aclr) Q <= {N{1'b0}};
 		else if (aload) Q <= data;
-		else if (Q >= M-1) Q <= {N{1'b0}};
+		else if (Q == M-1) Q <= {N{1'b0}};
 		else if (enable) Q <= Q + 1'b1;
 		else Q <= Q;
 		

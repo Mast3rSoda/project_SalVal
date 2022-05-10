@@ -6,13 +6,13 @@ module real_time_clock_board(
 	output [7:0] LEDR,
 	output LEDR9);
 	
-	real_time_clock (
+	real_time_clock clk(
 		CLOCK_50,
 		1'b1,
-		~KEY[0],
-		KEY[1],
-		KEY[2],
-		KEY[3],
+		KEY[0],
+		~KEY[1],
+		~KEY[2],
+		~KEY[3],
 		SW,
 		HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,
 		LEDR,
