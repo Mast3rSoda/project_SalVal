@@ -1,29 +1,60 @@
 module FSM_one_hot(
 	input clk,reset,w,
 	output reg z,
-	output reg [8:0] y);
+	output [8:0] y);
 	
-	reg [8:0] next = 9'b000000001;
+	reg [8:0] state,next;
+	assign y=state;
 	
+	localparam[8:0]
+	A = 9'b000000001,
+	B = 9'b000000010,
+	C = 9'b000000100,
+	D = 9'b000001000,
+	E = 9'b000010000,
+	F = 9'b000100000,
+	G = 9'b001000000,
+	H = 9'b010000000,
+	I = 9'b100000000;
 	
-	always@(*) begin
-		next[0]= ~reset;
-		next[1]= y[0] & ~w | y[5] & ~w | y[6] & ~w | y[7] & ~w | y[8] & ~w;
-		next[2]= y[1] & ~w;
-		next[3]= y[2] & ~w;
-		next[4]= y[3] & ~w | y[4] & ~w;
-		next[5]= y[4] & w | y[1] & w | y[2] & w | y[3] & w;
-		next[6]= y[5] & w;
-		next[7]= y[6] & w;
-		next[8]= y[7] & w | y[8] & w;
-	end
-	
-	always @(*)
-		z = y[4] | y[8];
-	
+	always @(posedge clk)
+		case (state)
+			A:
+				if(w) next = F;
+				else next = B;
+			B:
+				if(w) next = F;
+				else next = C;
+			C:
+				if(w) next = F;
+				else next = D;
+			D:
+				if(w) next = F;
+				else next = E;
+			E:
+				if(w) next = F;
+				else next = E;
+			F:
+				if(w) next = G;
+				else next = B;
+			G:
+				if(w) next = H;
+				else next = B;
+			H:
+				if(w) next = I;
+				else next = B;
+			I:
+				if(w) next = I;
+				else next = B;
+		endcase
+		
 	always @(posedge clk,negedge reset)
-		if(~reset)	y = 9'b000000001;
-		else	y<=next;
+		if(~reset)	state <= A;
+		else	state<=next;
+		
+	always @(*)
+		if(state==E||state==I) z=1;
+		else z=0;
 			
 endmodule
 	

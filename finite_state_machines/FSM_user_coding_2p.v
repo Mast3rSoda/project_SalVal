@@ -1,7 +1,7 @@
 module FSM_user_coding_2p(
 	input clk,reset,w,
 	output reg z,
-	output [8:0] y);
+	output [3:0] y);
 	
 	reg [3:0] state,next;
 	assign y=state;
