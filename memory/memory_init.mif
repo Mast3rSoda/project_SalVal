@@ -1,0 +1,12 @@
+DEPTH = 32;
+WIDTH = 9;
+ADDRESS_RADIX = HEX;
+DATA_RADIX = BIN;
+CONTENT
+BEGIN
+00 : 001000000; % mvi r0,#5 %
+01 : 000000101;
+02 : 000001000; % mv r1,r0 %
+03 : 010000001; % add r0, r1 %
+04 : 011000000; % sub r0, r0 %
+END;

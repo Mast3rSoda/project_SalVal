@@ -4,9 +4,10 @@ module proc_1 (
 	output reg Done,
 	output reg [8:0] BusWires);
 	
-	// stany automatu (user_coding)
+	// kody stanów automatu
 	localparam T0 = 2'b00, T1 = 2'b01, T2 = 2'b10, T3 = 2'b11;
-	// kody instrukcji
+	
+	//kody instrukcji
 	localparam mv = 3'b000, mvi = 3'b001, add = 3'b010, sub = 3'b011;
 	
 	wire [8:0] R0, R1, R2, R3, R4, R5, R6, R7;
@@ -19,7 +20,7 @@ module proc_1 (
 	reg [0:7] Rin, Rout;
 	reg [8:0] Sum;
 	reg IRin, DINout, Ain, Gin, Gout, AddSub;
-	reg [1:0] Tstep_Q, Tstep_D;
+	reg [1:0] Tstep_Q/*synthesis keep*/, Tstep_D;
 	
 	assign InstructionCode = IR[0:2];
 	
@@ -31,35 +32,33 @@ module proc_1 (
 		begin
 			case (Tstep_Q)
 				T0:
-				if (~Run) Tstep_D = T0;
-				else Tstep_D = T1;
+					if (~Run) Tstep_D = T0;
+					else Tstep_D = T1;
 				T1:
-				if (Done) Tstep_D = T0;
-				else Tstep_D = T2;
+					if (Done) Tstep_D = T0;
+					else Tstep_D = T2;
 				T2:
-				Tstep_D = T3;
+					Tstep_D = T3;
 				T3:
-				Tstep_D = T0;
+					Tstep_D = T0;
 			endcase
 		end
-	
+
 	always @(Tstep_Q or InstructionCode or Xreg or Yreg)
 		begin
 			Done = 1'b0; 
 			Ain = 1'b0;
-			Gin = 1'b0;
+			Gin = 1'b0; 
 			Gout = 1'b0;
 			AddSub = 1'b0;
-			IRin = 1'b0;
+			IRin = 1'b0; 
 			DINout = 1'b0; 
-			Rin = 8'b0; 
+			Rin = 8'b0;
 			Rout = 8'b0;
 			
 			case (Tstep_Q)
 				T0:
-					begin
-						IRin = 1'b1;
-					end
+					IRin = 1'b1;
 				T1:
 					case (InstructionCode)
 						mv:
@@ -79,7 +78,6 @@ module proc_1 (
 								Rout = Xreg;
 								Ain = 1'b1;
 							end
-						default: ;
 					endcase
 				T2:
 					case (InstructionCode)
@@ -94,28 +92,25 @@ module proc_1 (
 								AddSub = 1'b1;
 								Gin = 1'b1;
 							end
-						default: ;
 					endcase
 				T3:
 					case (InstructionCode)
-						add, sub:
-							begin
-								Gout = 1'b1;
-								Rin = Xreg;
-								Done = 1'b1;
-							end
-						default: ;
+					add, sub:
+						begin
+							Gout = 1'b1;
+							Rin = Xreg;
+							Done = 1'b1;
+						end
 					endcase
 			endcase
 		end
-		
+	
 	always @(posedge Clock, negedge Resetn)
 		if (!Resetn)
 			Tstep_Q <= T0;
 		else
 			Tstep_Q <= Tstep_D;
-			
-			
+		
 	regn reg_0 (BusWires, Rin[0], Clock, R0);
 	regn reg_1 (BusWires, Rin[1], Clock, R1);
 	regn reg_2 (BusWires, Rin[2], Clock, R2);
@@ -125,8 +120,9 @@ module proc_1 (
 	regn reg_6 (BusWires, Rin[6], Clock, R6);
 	regn reg_7 (BusWires, Rin[7], Clock, R7);
 	regn reg_A (BusWires, Ain, Clock, A);
-	regn #(.n(9)) reg_IR (DIN[8:0], IRin, Clock, IR);
-	
+	regn reg_IR (DIN[8:0], IRin, Clock, IR);
+		
+	//ALU
 	always @(AddSub or A or BusWires)
 		begin
 			if (!AddSub)
@@ -134,11 +130,12 @@ module proc_1 (
 			else
 				Sum = A - BusWires;
 		end
-		
+	
 	regn reg_G (Sum, Gin, Clock, G);
 	
 	assign Sel = {Rout, Gout, DINout};
 	
+	//Bus
 	always @(*)
 		begin
 			if (Sel == 10'b1000000000)
@@ -187,13 +184,13 @@ module dec3to8(
 				Y = 8'b00000000;
 		end
 endmodule
-
-
+	
+	
 module regn #(parameter n=9)(
 	input [n-1:0] R,
 	input Rin, Clock,
 	output reg [n-1:0] Q);
-	
+		
 	always @(posedge Clock)
 		if(Rin)
 			Q <= R;
